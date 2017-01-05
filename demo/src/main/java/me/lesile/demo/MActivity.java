@@ -19,6 +19,7 @@ import java.util.UUID;
 
 public class MActivity extends FragmentActivity{
     private FragmentManager mFragmentManager;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class MActivity extends FragmentActivity{
         setContentView(R.layout.mactivity);
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
-            replace(getFragment(), null, false);
+            replace(fragment = getFragment(), null, false);
         }
     }
 
@@ -49,5 +50,13 @@ public class MActivity extends FragmentActivity{
             ft.addToBackStack(tag);
         }
         ft.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (null != fragment && fragment instanceof MFragment){
+            ((MFragment) fragment).onBackPress();
+        }
     }
 }

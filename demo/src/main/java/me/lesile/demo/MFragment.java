@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +39,14 @@ public class MFragment extends Fragment implements ViewPager.OnPageChangeListene
 
     @Override
     public void onPageResume(String pageName) {
-        Log.i("router", "当前显示页面：" + pageName);
+        Log.i("router", "Current onResume ：" + pageName);
+        updateDisplayResume(pageName);
     }
 
     @Override
     public void onPagePause(String pageName) {
-        Log.e("router", "当前离开页面：" + pageName);
+        Log.e("router", "Current onPause ：" + pageName);
+        updateDisplayPause(pageName);
     }
 
 
@@ -51,17 +54,24 @@ public class MFragment extends Fragment implements ViewPager.OnPageChangeListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.mfragment, null);
+        displayResume = (TextView) v.findViewById(R.id.tv1);
+        displayPause = (TextView) v.findViewById(R.id.tv2);
+
         viewPager = (ViewPager) v.findViewById(R.id.id_page_vp);
         adapter = new MAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
 
         for (int i = 0; i < colors.length; i++){
-            names.add("test-" + i);
+            names.add("Page - " + i);
         }
         int defaultPosition = getArguments().getInt("position");
         router = new ViewPgaerRouter(defaultPosition, names, this);
         viewPager.setCurrentItem(defaultPosition);
+
+        //为了演示
+        updateDisplayPause(null);
+
         return v;
     }
 
@@ -128,5 +138,21 @@ public class MFragment extends Fragment implements ViewPager.OnPageChangeListene
     public void onPause() {
         super.onPause();
         router.onPagePause(viewPager.getCurrentItem());
+    }
+
+
+
+    //为了演示效果用
+    private TextView displayResume;
+    private TextView displayPause;
+    private void updateDisplayResume(String pageName){
+        displayResume.setText("Current onResume : " + pageName);
+    }
+    private void updateDisplayPause(String pageName){
+        displayPause.setText("Current onPause  : " + pageName);
+    }
+
+    public void onBackPress(){
+        updateDisplayResume(null);
     }
 }
