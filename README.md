@@ -25,9 +25,5 @@ public void onPagePause(String pageName) {
 
 ## Demo
 
-![image](1.gif)
-
-
-
-
+![image](https://github.com/zhaoxj/ViewPagerRouterHelper/blob/master/screencast/1.gif)
 
